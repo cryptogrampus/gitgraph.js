@@ -94,7 +94,7 @@ class Gitgraph extends React.Component<GitgraphProps, GitgraphState> {
       <svg ref={this.$graph}>
         {/* Translate graph down => top-most commit tooltip is not cropped */}
         <g transform={`translate(0, ${Tooltip.padding})`}>
-          {this.renderBranches()}
+          {this.renderBranchesPaths()}
           {this.renderCommits()}
           {this.$tooltip}
         </g>
@@ -132,7 +132,7 @@ class Gitgraph extends React.Component<GitgraphProps, GitgraphState> {
     });
   }
 
-  private renderBranches() {
+  private renderBranchesPaths() {
     const offset = this.gitgraph.template.commit.dot.size;
     const isBezier =
       this.gitgraph.template.branch.mergeStyle === MergeStyle.Bezier;
