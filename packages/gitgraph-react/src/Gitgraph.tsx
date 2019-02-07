@@ -95,6 +95,7 @@ class Gitgraph extends React.Component<GitgraphProps, GitgraphState> {
         {/* Translate graph down => top-most commit tooltip is not cropped */}
         <g transform={`translate(0, ${Tooltip.padding})`}>
           {this.renderBranchesPaths()}
+          {this.renderBranches()}
           {this.renderCommits()}
           {this.$tooltip}
         </g>
@@ -150,6 +151,29 @@ class Gitgraph extends React.Component<GitgraphProps, GitgraphState> {
         transform={`translate(${offset}, ${offset})`}
       />
     ));
+  }
+
+  private renderBranches() {
+    const branches = Array.from(this.gitgraph.branches.values());
+    return branches.map((branch) => {
+      const commitHash = this.gitgraph.refs.getCommit(branch.name);
+      const commit = this.state.commits.find(({ hash }) => commitHash === hash);
+      if (!commit) return null;
+
+      // TODO: create a <Tag> component (x, y, text, color)
+      return (
+        <g transform={`translate(${commit.x}, ${commit.y})`}>
+          <rect stroke="red" color="cyan" width={100} height={50} />
+          <text
+            alignmentBaseline="central"
+            fill={commit.style.message.color}
+            style={{ font: commit.style.message.font }}
+          >
+            {branch.name}
+          </text>
+        </g>
+      );
+    });
   }
 
   private renderCommits() {
